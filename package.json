@@ -1,29 +1,29 @@
 {
-  "name": "tetralympic_host",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kKar1503/Tetralympic_Host.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/kKar1503/Tetralympic_Host/issues"
-  },
-  "homepage": "https://github.com/kKar1503/Tetralympic_Host#readme",
-  "dependencies": {
-    "dotenv": "^16.0.0",
-    "express": "^4.17.2",
-    "jsonwebtoken": "^8.5.1",
-    "msgpack-lite": "^0.1.26",
-    "node-fetch": "^3.2.0",
-    "validator": "^13.7.0",
-    "ws": "^8.5.0"
-  }
+	"name": "tetralympic_host",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"tetrio-start": "node tetrio/src/index.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kKar1503/Tetralympic_Host.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/kKar1503/Tetralympic_Host/issues"
+	},
+	"homepage": "https://github.com/kKar1503/Tetralympic_Host#readme",
+	"dependencies": {
+		"dotenv": "^16.0.0",
+		"express": "^4.17.2",
+		"jsonwebtoken": "^8.5.1",
+		"msgpack-lite": "^0.1.26",
+		"node-fetch": "^3.2.0",
+		"validator": "^13.7.0",
+		"ws": "^8.5.0"
+	}
 }
