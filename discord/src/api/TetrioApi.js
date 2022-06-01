@@ -1,5 +1,5 @@
 import axios from "axios";
-import User from "./User.js";
+import User from "./TetrioUser.js";
 
 export default class Api {
 	/**
