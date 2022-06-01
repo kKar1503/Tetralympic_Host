@@ -19,19 +19,17 @@ export default class User {
 		this.username = data.username;
 		this.country = data.country;
 		if (data.league) {
-			this.tetraLeague = {
-				gamesPlayed: data.league.gamesplayed,
-				rating: data.league.rating,
-				glicko: data.league.glicko,
-				rd: data.league.rd,
-				rank: data.league.rank,
-				apm: data.league.apm,
-				pps: data.league.pps,
-				vs: data.league.vs,
-			};
+			this.gamesPlayed = data.league.gamesplayed;
+			this.rating = data.league.rating;
+			this.glicko = data.league.glicko;
+			this.rd = data.league.rd;
+			this.rank = data.league.rank;
+			this.apm = data.league.apm;
+			this.pps = data.league.pps;
+			this.vs = data.league.vs;
 		}
 		this.joinDate = data.ts;
 
-		Object.keys(this).forEach((key) => (this[key] === undefined ? delete this[key] : {}));
+		Object.keys(this).forEach((key) => (this[key] === undefined ? (this[key] = null) : {}));
 	}
 }

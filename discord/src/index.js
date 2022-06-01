@@ -1,3 +1,7 @@
-const { request } = require("https");
+import { TetrioApi } from "./api/index.js";
 
-request;
+const api = new TetrioApi();
+
+console.log(
+	await api.getMultipleUsers({ users: ["tourney_org", "kkar", "skyllabtw", "whoamashjfgak"] })
+);
