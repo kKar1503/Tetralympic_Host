@@ -11,7 +11,7 @@
  * @prop {Number} apm
  * @prop {Number} pps
  * @prop {Number} vs
- * @prop {String} joinDate
+ * @prop {Date} joinDate
  */
 export default class TetrioUser {
 	constructor(data) {

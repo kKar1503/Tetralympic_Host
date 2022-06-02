@@ -7,7 +7,7 @@
  */
 export default class DiscordUser {
 	constructor(data, tetrio_id) {
-		this.id = data._id;
+		this.id = data.id;
 		this.username = data.username;
 		this.discriminator = data.discriminator;
 		this.fk_tetrio_id = tetrio_id;
