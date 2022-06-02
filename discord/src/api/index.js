@@ -1,1 +1,1 @@
-export { default as TetrioApi } from "./Api.js";
+export { default as TetrioApi } from "./TetrioApi.js";

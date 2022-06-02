@@ -24,8 +24,7 @@ export default class Api {
 		}
 	}
 
-	async getMultipleUsers(options) {
-		let users = options.users;
+	async getMultipleUsers(users) {
 		let apiCalls = [];
 
 		for (let user of users) {
@@ -48,9 +47,7 @@ export default class Api {
 		return foundUsersObject;
 	}
 
-	async getOneUser(options) {
-		let user = options.user;
-
+	async getOneUser(user) {
 		const res = await this.apiCall("/users/" + user);
 
 		if (!res.success) {

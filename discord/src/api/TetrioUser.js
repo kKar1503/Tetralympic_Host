@@ -1,16 +1,16 @@
 /**
- * A user.
+ * A Tetrio user.
  * @prop {String} id
  * @prop {String} username
  * @prop {String} country
- * @prop {Number} tetraLeague.gamesPlayed
- * @prop {Number} tetraLeague.rating
- * @prop {Number} tetraLeague.glicko
- * @prop {Number} tetraLeague.rd
- * @prop {String} tetraLeague.rank
- * @prop {Number} tetraLeague.apm
- * @prop {Number} tetraLeague.pps
- * @prop {Number} tetraLeague.vs
+ * @prop {Number} gamesPlayed
+ * @prop {Number} rating
+ * @prop {Number} glicko
+ * @prop {Number} rd
+ * @prop {String} rank
+ * @prop {Number} apm
+ * @prop {Number} pps
+ * @prop {Number} vs
  * @prop {String} joinDate
  */
 export default class User {
@@ -28,7 +28,7 @@ export default class User {
 			this.pps = data.league.pps;
 			this.vs = data.league.vs;
 		}
-		this.joinDate = data.ts;
+		this.joinDate = new Date(data.ts);
 
 		Object.keys(this).forEach((key) => (this[key] === undefined ? (this[key] = null) : {}));
 	}
