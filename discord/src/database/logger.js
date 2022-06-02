@@ -81,6 +81,3 @@ export default class DatabaseLogger {
 		console.log(this.info("=".repeat(40)));
 	}
 }
-
-new DatabaseLogger().connected();
-new DatabaseLogger().failed();
