@@ -1,0 +1,9 @@
+export const STATUS = {
+	1: "UPCOMING",
+	2: "REGISTRATION_OPEN",
+	3: "REGISTRATION_CLOSE",
+	4: "CHECK_IN_OPEN",
+	5: "CHECK_IN_CLOSE",
+	6: "ONGOING",
+	7: "FINISHED",
+};
