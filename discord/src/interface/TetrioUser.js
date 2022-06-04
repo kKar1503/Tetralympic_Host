@@ -12,6 +12,7 @@
  * @prop {Number} pps
  * @prop {Number} vs
  * @prop {Date} joinDate
+ * @prop {String} highest_rank
  */
 export default class TetrioUser {
 	constructor(data) {
@@ -29,6 +30,7 @@ export default class TetrioUser {
 			this.vs = data.league.vs;
 		}
 		this.joinDate = new Date(data.ts);
+		this.highest_rank = data.highest_rank;
 
 		Object.keys(this).forEach((key) => (this[key] === undefined ? (this[key] = null) : {}));
 	}

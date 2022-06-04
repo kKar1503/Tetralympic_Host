@@ -1,22 +1,28 @@
-import { ThreadChannel } from "discord.js";
 import { TetrioApi } from "./api/index.js";
-import { TetrioUser } from "./models/index.js";
+import { TetrioUser, DiscordUser, Competition } from "./models/index.js";
 import _ from "lodash";
 
-const api = new TetrioApi();
+// const api = new TetrioApi();
 
-let users = await api.getMultipleUsers(["klyrrad", "blaarg", "kkar", "icly"]);
-let clonedUsers = _.cloneDeep(users);
+// let users = await api.getMultipleUsers(["flashm8", "tourney_org", "kkar", "icly"]);
+// let clonedUsers = _.cloneDeep(users);
 
-let connection = new TetrioUser({ useLogger: true, loggingLength: 60 });
-let dbQueries = [];
-for (let user in clonedUsers) {
-	dbQueries.push(connection.InsertOneUser(clonedUsers[user]));
-}
+// let connection = new TetrioUser({ useLogger: true, loggingLength: 60 });
+// let dbQueries = [];
+// for (let user in clonedUsers) {
+// 	dbQueries.push(connection.InsertOneUser(clonedUsers[user]));
+// }
 
-const res = await Promise.allSettled(dbQueries).catch((err) => {});
-connection.EndConnection();
+// await Promise.allSettled(dbQueries).catch((err) => {});
 
-for (let r of res) {
-	console.log(r.reason.code);
-}
+// const res = await connection.GetUsers();
+
+// connection.EndConnection();
+
+// let discord = new DiscordUser({ useLogger: true, loggingLength: 60 });
+// discord.EndConnection();
+
+let comp = new Competition({ useLogger: true, loggingLength: 60 });
+let comp1 = await comp.GetCompetitionById(1);
+console.log(comp1);
+comp.EndConnection();

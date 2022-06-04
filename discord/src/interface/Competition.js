@@ -10,7 +10,7 @@
  * @prop {String} status
  * @prop {Date} registration_deadline
  */
-export default class Competion {
+export default class Competition {
 	constructor(data) {
 		this.id = data.id;
 		this.name = data.name;
@@ -19,7 +19,7 @@ export default class Competion {
 		this.rank_lower_limit = data.rank_lower_limit;
 		this.rd_limit = data.rd_limit;
 		this.country_limit = data.country_limit;
-		this.status = data.status;
+		this.status = data.status || data.fk_status_id;
 		this.registration_deadline = data.registration_deadline;
 
 		Object.keys(this).forEach((key) => (this[key] === undefined ? (this[key] = null) : {}));
