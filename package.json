@@ -5,6 +5,8 @@
 	"main": "index.js",
 	"type": "module",
 	"scripts": {
+		"deploy": "node discord/src/app/DeployCommands.js",
+		"discord": "node discord/src/app/Bot.js",
 		"tetrio-start": "node tetrio/src/index.js"
 	},
 	"repository": {
@@ -13,7 +15,7 @@
 	},
 	"keywords": [],
 	"author": "",
-	"license": "ISC",
+	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/kKar1503/Tetralympic_Host/issues"
 	},
