@@ -1,4 +1,4 @@
-import { Validation } from "../jobs/index.js";
+import { Validation } from "../controllers/index.js";
 import { TetrioApi } from "../api/index.js";
 
 let testSubject1 = "jovangq";
