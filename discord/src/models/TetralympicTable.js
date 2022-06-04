@@ -1,9 +1,11 @@
 import { TetralympicDatabaseConfig, DatabaseLogger } from "../database/index.js";
+import "dotenv/config";
+const { NODE_ENV } = process.env;
 
 export default class TetralympicTable {
 	constructor(options = {}) {
 		this.tableName = options.tableName || "No table";
-		this.useLogger = options.useLogger || false;
+		this.useLogger = NODE_ENV == "development" ? options.useLogger || false : false;
 		if (this.useLogger) {
 			let loggingLength = options.loggingLength || 40;
 			this.logger = new DatabaseLogger({ loggingLength: loggingLength });
