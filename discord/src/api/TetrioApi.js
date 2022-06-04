@@ -1,11 +1,11 @@
 import axios from "axios";
-import User from "./TetrioUser.js";
+import { TetrioUserInterface } from "../interface/index.js";
 
 export default class Api {
 	/**
 	 * Creates a new Tetr.io Api Object
 	 */
-	constructor(options = {}) {
+	constructor() {
 		this.baseUrl = "https://ch.tetr.io/api";
 	}
 
@@ -35,7 +35,7 @@ export default class Api {
 
 		const foundUsers = res.map((r) => {
 			if (!r.success) return r.error;
-			return new User(r.data.user);
+			return new TetrioUserInterface(r.data.user);
 		});
 
 		const foundUsersObject = {};
@@ -54,6 +54,6 @@ export default class Api {
 			return new Error(res.error);
 		}
 
-		return new User(res.data.user);
+		return new TetrioUserInterface(res.data.user);
 	}
 }
