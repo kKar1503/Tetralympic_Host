@@ -4,7 +4,7 @@ import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 import path from "path";
 import { fileURLToPath } from "url";
-import { ActivityLog, ErrorLog } from "./Logger.js";
+import { ActivityLog, ErrorLog } from "../../../log/Logger.js";
 
 const { BOT_TOKEN, CLIENT_ID, GUILD_ID } = process.env;
 const __filename = fileURLToPath(import.meta.url);

@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { Client, Collection, Intents, Interaction, Message } from "discord.js";
-import { ActivityLog, ErrorLog } from "./Logger.js";
+import { ActivityLog, ErrorLog } from "../../../log/Logger.js";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
