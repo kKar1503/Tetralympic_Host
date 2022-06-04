@@ -7,8 +7,8 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const LOG_DIR = path.join(__dirname, "..", "logs");
-const ACTIVITY_LOG_DIR = path.join(__dirname, "..", "logs", "Activities.log");
-const ERROR_LOG_DIR = path.join(__dirname, "..", "logs", "Errors.log");
+const ACTIVITY_LOG_DIR = path.join(__dirname, "Activities.log");
+const ERROR_LOG_DIR = path.join(__dirname, "Errors.log");
 
 // Defining header message
 const LOG_HEADER = `Log File for Tetralympic Host
