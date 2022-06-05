@@ -9,15 +9,25 @@ router.get("/", (req, res) => {
 	res.json({ message: "This is the home page of tetrio route!" });
 });
 
-router.get("/users", async (req, res) => {
+router.get("/users", authenticateToken, (req, res) => {
+	let authData = req.authData;
+	if (!authData.getTetrioUsers) res.sendStatus(403);
 	let user = new TetrioUser();
-	let users = await user.GetUsers();
-	user.EndConnection();
-	res.json({
-		updated: new Date(),
-		count: users.length,
-		data: users,
-	});
+	user.GetUsers()
+		.then((users) => {
+			res.json({
+				updated: new Date(),
+				count: users.length,
+				data: users,
+			});
+		})
+		.catch((e) => {
+			res.status(500);
+			res.json({
+				message: e.message,
+			});
+		})
+		.finally(() => user.EndConnection());
 });
 
 router.get("/user", (req, res) => {
@@ -58,23 +68,31 @@ router.post("/user", (req, res) => {
 router.get("/user/:username", async (req, res) => {
 	let username = req.params.username;
 	let user = new TetrioUser();
-	let matchingUser = await user.GetOneUserByName(username);
-	user.EndConnection();
-	if (matchingUser.length == 0) {
-		res.status(404).json({
-			message: `No user with the username, ${username}, found, please check spelling.`,
-		});
-	} else {
-		res.json({
-			updated: new Date(),
-			data: matchingUser,
-		});
-	}
+	user.GetOneUserByName(username)
+		.then((results) => {
+			if (results.length == 0) {
+				res.status(404).json({
+					message: `No user with the username, ${username}, found, please check spelling.`,
+				});
+			} else {
+				res.json({
+					updated: new Date(),
+					data: results,
+				});
+			}
+		})
+		.catch((e) => {
+			res.status(500);
+			res.json({
+				message: e.message,
+			});
+		})
+		.finally(() => user.EndConnection());
 });
 
 router.post("/snapshot", authenticateToken, async (req, res) => {
 	let authData = req.authData;
-	if (!authData.snapshot) res.sendStatus(403);
+	if (!authData.pushSnapshots) res.sendStatus(403);
 	let api = new TetrioApi();
 	let snapshot;
 	try {
