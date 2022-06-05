@@ -6,7 +6,7 @@ import { fileURLToPath } from "url";
 // Defining paths
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const LOG_DIR = path.join(__dirname, "logs");
+const LOG_DIR = path.join(__dirname);
 const ACTIVITY_LOG_DIR = path.join(__dirname, "Activities.log");
 const ERROR_LOG_DIR = path.join(__dirname, "Errors.log");
 
