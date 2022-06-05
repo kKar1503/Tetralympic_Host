@@ -69,12 +69,15 @@ export default class DatabaseLogger {
 		console.log(this.error("=".repeat(this.loggingLength)));
 	}
 
-	QueryFailed(query, error) {
+	QueryFailed(query, error, options = {}) {
 		let timestamp = Moment().format("DD MMM YYYY, hh:mm:ss a");
 		this.log(`QUERY FAILED`, this.error, { divider: true });
 		this.log(`Timestamp: ${timestamp}`, this.info);
 		this.log(`Query: ${query || "No query"}`, this.info);
 		this.log(`Error: ${error || "No error code"}`, this.info);
+		if (options.message) {
+			this.log(`Message: ${options.message}`, this.info);
+		}
 		console.log(this.error("=".repeat(this.loggingLength)));
 	}
 
@@ -90,6 +93,9 @@ export default class DatabaseLogger {
 			this.log(`Affected Rows: ${result.affectedRows || "No affected rows."}`, this.info);
 		if (options.changedRows)
 			this.log(`Changed Rows: ${result.changedRows || "No changed rows."}`, this.info);
+		if (options.message) {
+			this.log(`Message: ${options.message}`, this.info);
+		}
 		console.log(this.success("=".repeat(this.loggingLength)));
 	}
 }
