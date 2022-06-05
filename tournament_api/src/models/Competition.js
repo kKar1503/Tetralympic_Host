@@ -38,22 +38,29 @@ export default class Competition extends TetralympicTable {
 
 	InsertOneCompetition(competition) {
 		return new Promise((resolve, reject) => {
-			const queryString = `INSERT INTO ${this.tableName} SET ?`;
-			this.connection.query(
-				queryString,
-				new CompetitionInterface(competition),
-				(error, result) => {
-					if (error) {
-						if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
-						return reject(error);
-					}
-					if (this.useLogger)
-						this.logger.QuerySuccess(queryString, result, {
-							affectedRows: true,
-						});
-					resolve(result);
+			let competitionInsert = [
+				competition.name,
+				competition.event_date,
+				competition.rank_upper_limit,
+				competition.rank_lower_limit,
+				competition.rd_limit,
+				competition.country_limit,
+				competition.status,
+				competition.registration_deadline,
+			];
+			const queryString = `INSERT INTO ${this.tableName} (name, event_date, rank_upper_limit, rank_lower_limit, rd_limit, country_limit, fk_status_id, registration_deadline) VALUES ?`;
+			this.connection.query(queryString, [[competitionInsert]], (error, result) => {
+				if (error) {
+					console.log(error);
+					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
+					return reject(error);
 				}
-			);
+				if (this.useLogger)
+					this.logger.QuerySuccess(queryString, result, {
+						affectedRows: true,
+					});
+				resolve(result);
+			});
 		});
 	}
 }
