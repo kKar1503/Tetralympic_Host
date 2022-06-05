@@ -1,5 +1,6 @@
 import axios from "axios";
-import { TetrioUserInterface } from "../interface/index.js";
+import { TetrioUserInterface, SnapshotInterface } from "../interface/index.js";
+import { TetrioApi } from "./index.js";
 
 export default class Api {
 	/**
@@ -33,27 +34,63 @@ export default class Api {
 
 		const res = await Promise.all(apiCalls);
 
-		const foundUsers = res.map((r) => {
-			if (!r.success) return r.error;
-			return new TetrioUserInterface(r.data.user);
+		return new Promise((resolve, reject) => {
+			const foundUsers = res.map((r) => {
+				if (!r.success) reject(r.error);
+				resolve(new TetrioUserInterface(r.data.user, { fromApi: true }));
+			});
+
+			const foundUsersObject = {};
+
+			for (let i = 0; i < users.length; i++) {
+				foundUsersObject[users[i]] = foundUsers[i];
+			}
+
+			resolve(foundUsersObject);
 		});
-
-		const foundUsersObject = {};
-
-		for (let i = 0; i < users.length; i++) {
-			foundUsersObject[users[i]] = foundUsers[i];
-		}
-
-		return foundUsersObject;
 	}
 
-	async getOneUser(user) {
-		const res = await this.apiCall("/users/" + user);
+	getOneUser(user) {
+		return new Promise(async (resolve, reject) => {
+			let res;
+			try {
+				res = await this.apiCall("/users/" + user);
+			} catch (e) {
+				reject(e);
+			}
 
-		if (!res.success) {
-			return new Error(res.error);
-		}
+			if (!res.success) {
+				reject(new Error(res.error));
+			}
 
-		return new TetrioUserInterface(res.data.user);
+			resolve(new TetrioUserInterface(res.data.user, { fromApi: true }));
+		});
+	}
+
+	getSnapshot() {
+		return new Promise(async (resolve, reject) => {
+			let res;
+
+			try {
+				res = await this.apiCall("/users/lists/league/all");
+			} catch (e) {
+				reject(e);
+			}
+
+			let users = res.data.users;
+
+			if (!res.success) {
+				reject(new Error(res.error));
+			}
+
+			users = users.map((u) => {
+				return new SnapshotInterface(u, new Date(res.cache.cached_at));
+			});
+
+			resolve({
+				cached_at: res.cache.cached_at,
+				users: users,
+			});
+		});
 	}
 }

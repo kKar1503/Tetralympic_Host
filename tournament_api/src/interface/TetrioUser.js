@@ -16,7 +16,11 @@
  */
 export default class TetrioUser {
 	constructor(data, options = {}) {
-		this.id = data._id;
+		if (options.fromApi) {
+			this.id = data._id;
+		} else {
+			this.id = data.id;
+		}
 		this.username = data.username.toLowerCase();
 		this.country = data.country;
 		if (options.fromApi) {
@@ -31,7 +35,7 @@ export default class TetrioUser {
 				this.vs = data.league.vs;
 			}
 		} else {
-			this.gamesPlayed = data.gamesplayed;
+			this.gamesPlayed = data.gamesPlayed;
 			this.rating = data.rating;
 			this.glicko = data.glicko;
 			this.rd = data.rd;
