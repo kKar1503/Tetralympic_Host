@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { ActivityLog } from "../../logs/Logger.js";
 import express from "express";
 import Chalk from "chalk";
 import jwt from "jsonwebtoken";
+import { httpLogger } from "./middlewares/index.js";
 const { HOSTNAME, AUTH_PORT, SECRET_KEY } = process.env;
 
 const port = AUTH_PORT || 4000;
@@ -10,11 +10,9 @@ const hostname = HOSTNAME;
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use((req, res) => {
-	res.on("finish", () => ActivityLog(1, `${req.method} ${req.url} [${res.statusCode}]`));
-});
+app.use(httpLogger);
 
-app.post("/", (req, res) => {
+app.get("/", (req, res) => {
 	let getTetrioUsers =
 		typeof req.body.getTetrioUsers === "boolean" ? req.body.getTetrioUsers : false;
 	let getDiscordUser =
@@ -29,7 +27,7 @@ app.post("/", (req, res) => {
 		},
 		SECRET_KEY
 	);
-	res.json(accessToken);
+	res.json({ accessToken: accessToken });
 });
 
 app.listen(port, hostname, () => {
