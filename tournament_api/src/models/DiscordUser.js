@@ -36,4 +36,35 @@ export default class DiscordUser extends TetralympicTable {
 			});
 		});
 	}
+
+	BindTetrio(discordId, tetrioId) {
+		return new Promise((resolve, reject) => {
+			const queryString = `UPDATE ${this.tableName} SET fk_tetrio_id = ? WHERE id = ?`;
+			this.connection.query(queryString, [tetrioId, discordId], (error, result) => {
+				if (error) {
+					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
+					return reject(error);
+				}
+				if (this.useLogger)
+					this.logger.QuerySuccess(queryString, result, {
+						affectedRows: true,
+					});
+				resolve(result);
+			});
+		});
+	}
+
+	GetOneUserByID(id) {
+		return new Promise((resolve, reject) => {
+			const queryString = `SELECT id, username, rating, \`rank\`, highest_rank FROM ${this.tableName} WHERE id = ?`;
+			this.connection.query(queryString, id, (error, result) => {
+				if (error) {
+					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
+					return reject(error);
+				}
+				if (this.useLogger) this.logger.QuerySuccess(queryString, result, { length: true });
+				resolve(result);
+			});
+		});
+	}
 }
