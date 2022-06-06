@@ -16,6 +16,6 @@ router.use("/tetrio", tetrio);
 
 router.use("/discord", discord);
 
-router.use("/register", registration);
+router.use("/registration", registration);
 
 export default router;
