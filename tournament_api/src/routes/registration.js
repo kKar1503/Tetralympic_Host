@@ -49,7 +49,7 @@ router.get("/check/:tetrioId/:compId", (req, res) => {
 		.finally(() => register.EndConnection());
 });
 
-router.get("/register/:tetrioId/:compId", (req, res) => {
+router.post("/register/:tetrioId/:compId", (req, res) => {
 	let tetrioId = req.params.tetrioId;
 	let compId = req.params.compId;
 	let register = new Registration();
@@ -78,11 +78,10 @@ router.delete("/register/:tetrioId/:compId", (req, res) => {
 	register
 		.Unregister(tetrioId, compId)
 		.then((results) => {
-			if (results.legnth === 0) res.sendStatus(404);
+			if (results.affectedRows === 0) res.sendStatus(404);
 			res.json({
 				updated: new Date(),
-				count: results.length,
-				data: results,
+				message: `Successfully unregister ${results.affectedRows} user(s).`,
 			});
 		})
 		.catch((e) => {
