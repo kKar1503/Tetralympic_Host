@@ -36,7 +36,7 @@ router.get("/user", (req, res) => {
 	});
 });
 
-router.post("/user", (req, res) => {
+router.post("/user", async (req, res) => {
 	let user;
 	try {
 		user = new TetrioUserInterface(req.body);
@@ -46,6 +46,7 @@ router.post("/user", (req, res) => {
 			message: `User is not properly defined.`,
 		});
 	}
+	user.highest_rank = await new TetrioApi().getPeakRank(user.id);
 	let tetrioUser = new TetrioUser();
 	tetrioUser
 		.InsertOneUser(user)

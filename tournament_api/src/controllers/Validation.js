@@ -10,7 +10,7 @@ import {
 import { Competition } from "../models/index.js";
 
 export async function Validation(tetrioUser, competitionId, options = {}) {
-	let competition = new Competition({ useLogger: true, loggingLength: 60 });
+	let competition = new Competition();
 	let matchingCompetition = await competition.GetCompetitionById(competitionId);
 	competition.EndConnection();
 	let userRank = options.validateByPeak ? tetrioUser : tetrioUser.rank;

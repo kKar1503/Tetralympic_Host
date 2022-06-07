@@ -67,6 +67,26 @@ export default class Api {
 		});
 	}
 
+	getPeakRank(id) {
+		return new Promise(async (resolve, reject) => {
+			let res;
+			try {
+				res = await this.apiCall("/news/user_" + id);
+			} catch (e) {
+				reject(e);
+			}
+
+			if (!res.success) {
+				reject(new Error(res.error));
+			}
+
+			let peakRankObj = res.data.news.find((e) => e.type === "rankup");
+			let peakRank = peakRankObj ? peakRankObj.data.rank : "z";
+
+			resolve(peakRank);
+		});
+	}
+
 	getSnapshot() {
 		return new Promise(async (resolve, reject) => {
 			let res;
@@ -94,3 +114,6 @@ export default class Api {
 		});
 	}
 }
+
+let teto = new Api();
+console.log(await teto.getPeakRank("5f506fd41fee2b2e8c2a8402"));
