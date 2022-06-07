@@ -1,5 +1,6 @@
 import express from "express";
-import { Registration } from "../models/index.js";
+import { Registration, TetrioUser, Competition } from "../models/index.js";
+import { Validation } from "../controllers/index.js";
 
 const router = express.Router();
 
@@ -48,26 +49,69 @@ router.get("/check/:tetrioId/:compId", (req, res) => {
 		.finally(() => register.EndConnection());
 });
 
-router.post("/register/:tetrioId/:compId", (req, res) => {
+router.post("/register/:tetrioId/:compId", async (req, res) => {
 	let tetrioId = req.params.tetrioId;
 	let compId = req.params.compId;
-	let register = new Registration();
-	register
-		.Register(tetrioId, compId)
-		.then((results) => {
-			res.status(201).json({
-				updated: new Date(),
-				message: `Successfully register ${results.affectedRows} user(s).`,
+	let competition = new Competition();
+	let matchingCompetition;
+	try {
+		matchingCompetition = await competition.GetCompetitionById(compId);
+		if (matchingCompetition.length === 0) {
+			res.status(404).json({
+				message: `No competition with the id, ${compId}, found, please check again.`,
 			});
+		} else {
+			matchingCompetition = matchingCompetition[0];
+		}
+	} catch (e) {
+		res.status(422).json({
+			message: e.message,
+		});
+	}
+	competition.EndConnection();
+	let tetrioUser = new TetrioUser();
+	tetrioUser
+		.GetOneUserById(tetrioId)
+		.then((user) => {
+			if (user.length == 0) {
+				res.status(404).json({
+					message: `No user with the id, ${tetrioId}, found, please check again.`,
+				});
+			} else {
+				Validation(user[0], matchingCompetition, { validateByPeak: false })
+					.then(() => {
+						let register = new Registration();
+						register
+							.Register(tetrioId, compId)
+							.then((results) => {
+								res.status(201).json({
+									updated: new Date(),
+									message: `Successfully register ${results.affectedRows} user(s).`,
+								});
+							})
+							.catch((e) => {
+								if (e.errno === 1062)
+									res.status(422).json({ message: `Already registered.` });
+								else
+									res.status(500).json({
+										message: e.message,
+									});
+							})
+							.finally(() => register.EndConnection());
+					})
+					.catch((e) => {
+						res.status(422).json({
+							message: e.message,
+						});
+					});
+			}
 		})
 		.catch((e) => {
-			if (e.errno === 1062) res.status(422).json({ message: `Already registered.` });
-			else
-				res.status(500).json({
-					message: e.message,
-				});
+			res.status(422).json({
+				message: e.message,
+			});
 		})
-		.finally(() => register.EndConnection());
+		.finally(() => tetrioUser.EndConnection());
 });
 
 router.delete("/register/:tetrioId/:compId", (req, res) => {

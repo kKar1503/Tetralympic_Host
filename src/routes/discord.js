@@ -79,7 +79,6 @@ router.put("/user/:discordId", (req, res) => {
 	discordUser
 		.BindTetrio(discordId, tetrioId)
 		.then((result) => {
-			console.log(result);
 			res.json({
 				affectedRows: result.affectedRows,
 				message: `Successfully updated ${result.affectedRows} user.`,

@@ -30,9 +30,9 @@ export default class Competition extends TetralympicTable {
 					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
 					return reject(error);
 				}
-				console.log(result);
 				if (this.useLogger) this.logger.QuerySuccess(queryString, result, { length: true });
-				resolve(new CompetitionInterface(result[0]));
+				if (result.length !== 0) result[0] = new CompetitionInterface(result[0]);
+				resolve(result);
 			});
 		});
 	}
@@ -45,7 +45,6 @@ export default class Competition extends TetralympicTable {
 					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
 					return reject(error);
 				}
-				console.log(result);
 				if (this.useLogger)
 					this.logger.QuerySuccess(queryString, result, { affectedRows: true });
 				resolve(result);

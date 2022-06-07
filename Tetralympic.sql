@@ -30,7 +30,7 @@ CREATE TABLE `competition` (
   `event_date` datetime NOT NULL,
   `rank_upper_limit` varchar(45) DEFAULT NULL,
   `rank_lower_limit` varchar(45) DEFAULT NULL,
-  `rd_limit` decimal(9,6) DEFAULT NULL,
+  `rd_limit` int DEFAULT NULL,
   `country_limit` varchar(45) DEFAULT NULL,
   `fk_status_id` int NOT NULL,
   `registration_deadline` datetime NOT NULL,

@@ -11,7 +11,7 @@
  * @prop {Number} apm
  * @prop {Number} pps
  * @prop {Number} vs
- * @prop {Date} joinDate
+ * @prop {Date} joindate
  * @prop {String} highest_rank
  */
 export default class TetrioUser {
@@ -25,7 +25,7 @@ export default class TetrioUser {
 		this.country = data.country;
 		if (options.fromApi) {
 			if (data.league) {
-				this.gamesPlayed = data.league.gamesplayed;
+				this.gamesplayed = data.league.gamesplayed;
 				this.rating = data.league.rating;
 				this.glicko = data.league.glicko;
 				this.rd = data.league.rd;
@@ -33,9 +33,10 @@ export default class TetrioUser {
 				this.apm = data.league.apm;
 				this.pps = data.league.pps;
 				this.vs = data.league.vs;
+				this.joindate = new Date(data.ts);
 			}
 		} else {
-			this.gamesPlayed = data.gamesPlayed;
+			this.gamesplayed = data.gamesplayed;
 			this.rating = data.rating;
 			this.glicko = data.glicko;
 			this.rd = data.rd;
@@ -43,8 +44,8 @@ export default class TetrioUser {
 			this.apm = data.apm;
 			this.pps = data.pps;
 			this.vs = data.vs;
+			this.joindate = new Date(data.joindate);
 		}
-		this.joinDate = new Date(data.ts);
 		this.highest_rank = data.highest_rank;
 
 		Object.keys(this).forEach((key) => (this[key] === undefined ? (this[key] = null) : {}));

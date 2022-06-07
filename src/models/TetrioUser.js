@@ -1,5 +1,5 @@
 import TetralympicTable from "./TetralympicTable.js";
-import { TetrioApi } from "../api/index.js";
+import { TetrioUserInterface } from "../interface/index.js";
 
 export default class TetrioUser extends TetralympicTable {
 	constructor(options = {}) {
@@ -9,13 +9,14 @@ export default class TetrioUser extends TetralympicTable {
 
 	GetUsers() {
 		return new Promise((resolve, reject) => {
-			const queryString = `SELECT id, username, rating, \`rank\`, highest_rank FROM ${this.tableName}`;
+			const queryString = `SELECT * FROM ${this.tableName}`;
 			this.connection.query(queryString, (error, result) => {
 				if (error) {
 					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
 					return reject(error);
 				}
 				if (this.useLogger) this.logger.QuerySuccess(queryString, result, { length: true });
+				result = result.map((r) => new TetrioUserInterface(r));
 				resolve(result);
 			});
 		});
@@ -23,13 +24,29 @@ export default class TetrioUser extends TetralympicTable {
 
 	GetOneUserByName(username) {
 		return new Promise((resolve, reject) => {
-			const queryString = `SELECT id, username, rating, \`rank\`, highest_rank FROM ${this.tableName} WHERE username = ?`;
+			const queryString = `SELECT * FROM ${this.tableName} WHERE username = ?`;
 			this.connection.query(queryString, username.toLowerCase(), (error, result) => {
 				if (error) {
 					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
 					return reject(error);
 				}
 				if (this.useLogger) this.logger.QuerySuccess(queryString, result, { length: true });
+				if (result.length !== 0) result[0] = new TetrioUserInterface(result[0]);
+				resolve(result);
+			});
+		});
+	}
+
+	GetOneUserById(id) {
+		return new Promise((resolve, reject) => {
+			const queryString = `SELECT * FROM ${this.tableName} WHERE id = ?`;
+			this.connection.query(queryString, id, (error, result) => {
+				if (error) {
+					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
+					return reject(error);
+				}
+				if (this.useLogger) this.logger.QuerySuccess(queryString, result, { length: true });
+				if (result.length !== 0) result[0] = new TetrioUserInterface(result[0]);
 				resolve(result);
 			});
 		});
