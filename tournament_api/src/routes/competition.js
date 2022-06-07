@@ -29,6 +29,7 @@ router.post("/", (req, res) => {
 			res.status(201);
 			res.json({
 				affectedRows: result.affectedRows,
+				insertId: result.insertId,
 				message: `Successfully insert ${result.affectedRows} competition.`,
 			});
 		})
@@ -73,6 +74,30 @@ router.get("/:id", async (req, res) => {
 				res.json({
 					updated: new Date(),
 					data: results,
+				});
+			}
+		})
+		.catch((e) => {
+			res.status(500);
+			res.json({
+				message: e.message,
+			});
+		})
+		.finally(() => comp.EndConnection());
+});
+
+router.delete("/:id", async (req, res) => {
+	let id = parseInt(req.params.id);
+	let comp = new Competition();
+	comp.DeleteCompetitionById(id)
+		.then((results) => {
+			if (results.length == 0) {
+				res.status(404).json({
+					message: `No competition with the id, ${id}, found, please check.`,
+				});
+			} else {
+				res.json({
+					message: `Successfully deleted ${results.affectedRows} row(s).`,
 				});
 			}
 		})
