@@ -7,7 +7,8 @@
 	"scripts": {
 		"deploy": "node discord/src/app/DeployCommands.js",
 		"discord": "node discord/src/app/Bot.js",
-		"tetrio-start": "node tetrio/src/index.js"
+		"tetrio-start": "node tetrio/src/index.js",
+		"api-start": "node tournament_api/src/index.js"
 	},
 	"repository": {
 		"type": "git",
