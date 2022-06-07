@@ -2,13 +2,10 @@
 	"name": "tetralympic_host",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
+	"main": "src/index.js",
 	"type": "module",
 	"scripts": {
-		"deploy": "node discord/src/app/DeployCommands.js",
-		"discord": "node discord/src/app/Bot.js",
-		"tetrio-start": "node tetrio/src/index.js",
-		"api-start": "node tournament_api/src/index.js"
+		"start": "node src/index.js"
 	},
 	"repository": {
 		"type": "git",
@@ -22,24 +19,15 @@
 	},
 	"homepage": "https://github.com/kKar1503/Tetralympic_Host#readme",
 	"dependencies": {
-		"@discordjs/builders": "^0.13.0",
-		"@discordjs/rest": "^0.4.1",
 		"axios": "^0.27.2",
 		"chalk": "^5.0.1",
-		"discord-api-types": "^0.33.1",
-		"discord.js": "^13.7.0",
 		"dotenv": "^16.0.0",
 		"express": "^4.17.2",
 		"jsonwebtoken": "^8.5.1",
 		"lodash": "^4.17.21",
 		"moment": "^2.29.3",
 		"morgan": "^1.10.0",
-		"msgpack-lite": "^0.1.26",
-		"mysql": "^2.18.1",
 		"mysql2": "^2.3.3",
-		"node-fetch": "^3.2.0",
-		"path": "^0.12.7",
-		"validator": "^13.7.0",
-		"ws": "^8.5.0"
+		"path": "^0.12.7"
 	}
 }
