@@ -49,7 +49,7 @@ DROP TABLE IF EXISTS `discord_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `discord_user` (
-  `id` bigint NOT NULL,
+  `id` varchar(100) NOT NULL,
   `username` varchar(100) NOT NULL,
   `discriminator` varchar(45) NOT NULL,
   `fk_tetrio_id` varchar(100) DEFAULT NULL,

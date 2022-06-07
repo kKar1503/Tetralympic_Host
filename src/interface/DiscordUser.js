@@ -1,6 +1,6 @@
 /**
  * A Discord user.
- * @prop {Number} id
+ * @prop {String} id
  * @prop {String} username
  * @prop {String} discriminator
  * @prop {String} fk_tetrio_id

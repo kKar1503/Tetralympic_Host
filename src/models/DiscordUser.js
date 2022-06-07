@@ -16,7 +16,9 @@ export default class DiscordUser extends TetralympicTable {
 					return reject(error);
 				}
 				if (this.useLogger) this.logger.QuerySuccess(queryString, result, { length: true });
-				result = result.map((r) => new DiscordUserInterface(r));
+				result = result.map(
+					(r) => new DiscordUserInterface(r, { showTetrioUsername: true })
+				);
 				resolve(result);
 			});
 		});
@@ -61,11 +63,12 @@ export default class DiscordUser extends TetralympicTable {
 			const queryString = `SELECT d.*, t.username as tetrioUsername FROM ${this.tableName} as d JOIN tetrio_user as t ON d.fk_tetrio_id = t.id WHERE d.id = ?`;
 			this.connection.query(queryString, id, (error, result) => {
 				if (error) {
-					console.log(error);
 					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
 					return reject(error);
 				}
 				if (this.useLogger) this.logger.QuerySuccess(queryString, result, { length: true });
+				if (result.length !== 0)
+					result[0] = new DiscordUserInterface(result[0], { showTetrioUsername: true });
 				resolve(result);
 			});
 		});

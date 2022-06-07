@@ -68,7 +68,7 @@ router.post("/user", (req, res) => {
 
 router.put("/user/:discordId", (req, res) => {
 	let tetrioId = req.body.tetrioId;
-	let discordId = req.params.discordId && parseInt(req.params.discordId);
+	let discordId = req.params.discordId;
 	if (!tetrioId) {
 		res.status(422);
 		res.json({
@@ -95,7 +95,7 @@ router.put("/user/:discordId", (req, res) => {
 });
 
 router.get("/user/:id", async (req, res) => {
-	let id = req.params.id && parseInt(req.params.id);
+	let id = req.params.id;
 	let user = new DiscordUser();
 	user.GetOneUserByID(id)
 		.then((results) => {
