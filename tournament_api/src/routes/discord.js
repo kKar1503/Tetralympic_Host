@@ -95,7 +95,7 @@ router.put("/user/:discordId", (req, res) => {
 });
 
 router.get("/user/:id", async (req, res) => {
-	let id = req.params.id;
+	let id = parseInt(req.params.id);
 	let user = new DiscordUser();
 	user.GetOneUserByID(id)
 		.then((results) => {

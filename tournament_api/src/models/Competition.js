@@ -16,10 +16,7 @@ export default class Competition extends TetralympicTable {
 					return reject(error);
 				}
 				if (this.useLogger) this.logger.QuerySuccess(queryString, result, { length: true });
-				let modResult = result.map(
-					(r) => new CompetitionInterface(r, { status: "number" })
-				);
-				console.log(modResult);
+				result = result.map((r) => new CompetitionInterface(r, { status: "number" }));
 				resolve(result);
 			});
 		});

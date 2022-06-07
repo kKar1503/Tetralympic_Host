@@ -1,4 +1,5 @@
 import TetralympicTable from "./TetralympicTable.js";
+import { DiscordUserInterface } from "../interface/index.js";
 
 export default class DiscordUser extends TetralympicTable {
 	constructor(options = {}) {
@@ -8,13 +9,14 @@ export default class DiscordUser extends TetralympicTable {
 
 	GetUsers() {
 		return new Promise((resolve, reject) => {
-			const queryString = `SELECT d.*, t.username FROM ${this.tableName} as d JOIN tetrio_user as t ON d.fk_tetrio_id = t.id`;
+			const queryString = `SELECT d.*, t.username as tetrioUsername FROM ${this.tableName} as d JOIN tetrio_user as t ON d.fk_tetrio_id = t.id`;
 			this.connection.query(queryString, (error, result) => {
 				if (error) {
 					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
 					return reject(error);
 				}
 				if (this.useLogger) this.logger.QuerySuccess(queryString, result, { length: true });
+				result = result.map((r) => new DiscordUserInterface(r));
 				resolve(result);
 			});
 		});
@@ -56,9 +58,10 @@ export default class DiscordUser extends TetralympicTable {
 
 	GetOneUserByID(id) {
 		return new Promise((resolve, reject) => {
-			const queryString = `SELECT id, username, rating, \`rank\`, highest_rank FROM ${this.tableName} WHERE id = ?`;
+			const queryString = `SELECT d.*, t.username as tetrioUsername FROM ${this.tableName} as d JOIN tetrio_user as t ON d.fk_tetrio_id = t.id WHERE d.id = ?`;
 			this.connection.query(queryString, id, (error, result) => {
 				if (error) {
+					console.log(error);
 					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
 					return reject(error);
 				}

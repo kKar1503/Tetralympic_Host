@@ -11,6 +11,7 @@ export default class DiscordUser {
 		this.username = data.username;
 		this.discriminator = data.discriminator;
 		this.fk_tetrio_id = tetrio_id || data.fk_tetrio_id;
+		this.tetrioUsername = data.tetrioUsername;
 
 		Object.keys(this).forEach((key) => (this[key] === undefined ? (this[key] = null) : {}));
 	}
