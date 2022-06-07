@@ -8,7 +8,7 @@ export default class DiscordUser extends TetralympicTable {
 
 	GetUsers() {
 		return new Promise((resolve, reject) => {
-			const queryString = `SELECT id, username, discriminator, fk_tetrio_id FROM ${this.tableName}`;
+			const queryString = `SELECT d.*, t.username FROM ${this.tableName} as d JOIN tetrio_user as t ON d.fk_tetrio_id = t.id`;
 			this.connection.query(queryString, (error, result) => {
 				if (error) {
 					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
