@@ -72,7 +72,7 @@ router.get("/register/:tetrioId/:compId", (req, res) => {
 		.finally(() => register.EndConnection());
 });
 
-router.get("/unregister/:tetrioId/:compId", (req, res) => {
+router.delete("/register/:tetrioId/:compId", (req, res) => {
 	let tetrioId = req.params.tetrioId;
 	let compId = req.params.compId;
 	let register = new Registration();
