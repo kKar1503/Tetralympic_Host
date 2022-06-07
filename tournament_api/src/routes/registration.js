@@ -41,8 +41,7 @@ router.get("/check/:tetrioId/:compId", (req, res) => {
 			});
 		})
 		.catch((e) => {
-			res.status(500);
-			res.json({
+			res.status(500).json({
 				message: e.message,
 			});
 		})
@@ -56,17 +55,17 @@ router.post("/register/:tetrioId/:compId", (req, res) => {
 	register
 		.Register(tetrioId, compId)
 		.then((results) => {
-			res.json({
+			res.status(201).json({
 				updated: new Date(),
 				message: `Successfully register ${results.affectedRows} user(s).`,
 			});
 		})
 		.catch((e) => {
 			if (e.errno === 1062) res.status(422).json({ message: `Already registered.` });
-			res.status(500);
-			res.json({
-				message: e.message,
-			});
+			else
+				res.status(500).json({
+					message: e.message,
+				});
 		})
 		.finally(() => register.EndConnection());
 });
@@ -79,14 +78,14 @@ router.delete("/register/:tetrioId/:compId", (req, res) => {
 		.Unregister(tetrioId, compId)
 		.then((results) => {
 			if (results.affectedRows === 0) res.sendStatus(404);
-			res.json({
-				updated: new Date(),
-				message: `Successfully unregister ${results.affectedRows} user(s).`,
-			});
+			else
+				res.json({
+					updated: new Date(),
+					message: `Successfully unregister ${results.affectedRows} user(s).`,
+				});
 		})
 		.catch((e) => {
-			res.status(500);
-			res.json({
+			res.status(500).json({
 				message: e.message,
 			});
 		})
