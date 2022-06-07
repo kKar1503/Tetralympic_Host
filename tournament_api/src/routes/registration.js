@@ -37,8 +37,7 @@ router.get("/check/:tetrioId/:compId", (req, res) => {
 		.then((results) => {
 			res.json({
 				updated: new Date(),
-				count: results.length,
-				data: results,
+				registered: results.length > 0,
 			});
 		})
 		.catch((e) => {
@@ -79,6 +78,7 @@ router.delete("/register/:tetrioId/:compId", (req, res) => {
 	register
 		.Unregister(tetrioId, compId)
 		.then((results) => {
+			if (results.legnth === 0) res.sendStatus(404);
 			res.json({
 				updated: new Date(),
 				count: results.length,

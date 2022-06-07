@@ -114,6 +114,3 @@ export default class Api {
 		});
 	}
 }
-
-let teto = new Api();
-console.log(await teto.getPeakRank("5f506fd41fee2b2e8c2a8402"));
