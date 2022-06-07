@@ -58,11 +58,11 @@ router.get("/register/:tetrioId/:compId", (req, res) => {
 		.then((results) => {
 			res.json({
 				updated: new Date(),
-				count: results.length,
-				data: results,
+				message: `Successfully register ${results.affectedRows} user(s).`,
 			});
 		})
 		.catch((e) => {
+			if (e.errno === 1062) res.status(422).json({ message: `Already registered.` });
 			res.status(500);
 			res.json({
 				message: e.message,
