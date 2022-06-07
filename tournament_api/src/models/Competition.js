@@ -9,14 +9,17 @@ export default class Competition extends TetralympicTable {
 
 	GetCompetitions() {
 		return new Promise((resolve, reject) => {
-			const queryString = `SELECT * FROM ${this.tableName}`;
+			const queryString = `SELECT c.*, s.status FROM ${this.tableName} AS c JOIN status AS s ON c.fk_status_id = s.id;`;
 			this.connection.query(queryString, (error, result) => {
 				if (error) {
 					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
 					return reject(error);
 				}
 				if (this.useLogger) this.logger.QuerySuccess(queryString, result, { length: true });
-				result.map((r) => new CompetitionInterface(r));
+				let modResult = result.map(
+					(r) => new CompetitionInterface(r, { status: "number" })
+				);
+				console.log(modResult);
 				resolve(result);
 			});
 		});
@@ -24,12 +27,14 @@ export default class Competition extends TetralympicTable {
 
 	GetCompetitionById(id) {
 		return new Promise((resolve, reject) => {
-			const queryString = `SELECT * FROM ${this.tableName} WHERE id = ?`;
+			const queryString = `SELECT c.*, s.status FROM ${this.tableName} AS c JOIN status AS s ON c.fk_status_id = s.id WHERE c.id = ?;`;
+			console.log(id);
 			this.connection.query(queryString, id, (error, result) => {
 				if (error) {
 					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
 					return reject(error);
 				}
+				console.log(result);
 				if (this.useLogger) this.logger.QuerySuccess(queryString, result, { length: true });
 				resolve(new CompetitionInterface(result[0]));
 			});

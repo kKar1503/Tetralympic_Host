@@ -13,14 +13,16 @@ router.get("/", (req, res) => {
 router.post("/", (req, res) => {
 	let comp;
 	try {
-		comp = new CompetitionInterface(req.body);
+		comp = new CompetitionInterface(req.body, { status: "number" });
 	} catch (e) {
+		console.log(e);
 		res.status(422);
 		res.json({
 			message: `Competition is not properly defined.`,
 		});
+		return;
 	}
-	let competition = new Competition({ useLogger: true });
+	let competition = new Competition();
 	competition
 		.InsertOneCompetition(comp)
 		.then((result) => {
@@ -59,7 +61,7 @@ router.get("/all", (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-	let id = req.params.id;
+	let id = parseInt(req.params.id);
 	let comp = new Competition();
 	comp.GetCompetitionById(id)
 		.then((results) => {
