@@ -36,17 +36,17 @@ router.get("/user", (req, res) => {
 	});
 });
 
-router.post("/user", async (req, res) => {
+router.post("/user/:username", async (req, res) => {
+	let tetrioApi = new TetrioApi();
 	let user;
 	try {
-		user = new TetrioUserInterface(req.body);
+		user = await tetrioApi.getOneUser(req.params.username);
 	} catch (e) {
-		res.status(422);
-		res.json({
-			message: `User is not properly defined.`,
+		return res.status(404).json({
+			message: `No user with the username, ${username}, found, please check spelling.`,
 		});
 	}
-	user.highest_rank = await new TetrioApi().getPeakRank(user.id);
+	user.highest_rank = await tetrioApi.getPeakRank(user.id);
 	let tetrioUser = new TetrioUser();
 	tetrioUser
 		.InsertOneUser(user)
@@ -74,6 +74,31 @@ router.get("/user/:username", async (req, res) => {
 			if (results.length == 0) {
 				res.status(404).json({
 					message: `No user with the username, ${username}, found, please check spelling.`,
+				});
+			} else {
+				res.json({
+					updated: new Date(),
+					data: results,
+				});
+			}
+		})
+		.catch((e) => {
+			res.status(500);
+			res.json({
+				message: e.message,
+			});
+		})
+		.finally(() => user.EndConnection());
+});
+
+router.get("/userById/:id", async (req, res) => {
+	let id = req.params.id;
+	let user = new TetrioUser();
+	user.GetOneUserById(id)
+		.then((results) => {
+			if (results.length == 0) {
+				res.status(404).json({
+					message: `No user with the id, ${id}, found, please check spelling.`,
 				});
 			} else {
 				res.json({

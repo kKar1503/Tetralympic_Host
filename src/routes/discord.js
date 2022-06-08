@@ -1,6 +1,6 @@
 import express from "express";
 import { authenticateToken } from "../middlewares/authenticateToken.js";
-import { DiscordUser } from "../models/index.js";
+import { DiscordUser, TetrioUser } from "../models/index.js";
 import { DiscordUserInterface } from "../interface/index.js";
 
 const router = express.Router();
@@ -66,12 +66,24 @@ router.post("/user", (req, res) => {
 		.finally(() => discordUser.EndConnection());
 });
 
-router.put("/user/:discordId", (req, res) => {
-	let tetrioId = req.body.tetrioId;
+router.put("/user/:discordId", async (req, res) => {
+	let tetrioUsername = req.body.tetrioUsername;
 	let discordId = req.params.discordId;
+
+	let tetrioUser = new TetrioUser();
+	let foundUser;
+
+	try {
+		foundUser = await tetrioUser.GetOneUserByName(tetrioUsername);
+	} catch (e) {
+		return res.status(404).json({
+			message: `No user with the Tetrio username, ${tetrioUsername}, found, please check again.`,
+		});
+	}
+	let tetrioId = foundUser[0].id;
+
 	if (!tetrioId) {
-		res.status(422);
-		res.json({
+		return res.status(422).json({
 			message: `tetrioId must be defined.`,
 		});
 	}
@@ -101,6 +113,44 @@ router.get("/user/:id", async (req, res) => {
 			if (results.length == 0) {
 				res.status(404).json({
 					message: `No user with the id, ${id}, found, please check again.`,
+				});
+			} else {
+				res.json({
+					updated: new Date(),
+					data: results,
+				});
+			}
+		})
+		.catch((e) => {
+			res.status(500);
+			res.json({
+				message: e.message,
+			});
+		})
+		.finally(() => user.EndConnection());
+});
+
+router.get("/whois/:username", async (req, res) => {
+	let username = req.params.username;
+	let tetrioUser = new TetrioUser();
+	let foundUser;
+	try {
+		foundUser = await tetrioUser.GetOneUserByName(username);
+	} catch (e) {
+		return res.status(404).json({
+			message: `No user with the Tetrio username, ${username}, found, please check again.`,
+		});
+	}
+	if (foundUser.length === 0)
+		return res.status(404).json({
+			message: `No user with the Tetrio username, ${username}, found, please check again.`,
+		});
+	let user = new DiscordUser();
+	user.GetOneUserByTetrio(foundUser[0].id)
+		.then((results) => {
+			if (results.length == 0) {
+				res.status(404).json({
+					message: `No one is binded with ${username}`,
 				});
 			} else {
 				res.json({
