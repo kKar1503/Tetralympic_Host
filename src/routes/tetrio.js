@@ -42,10 +42,12 @@ router.post("/user/:username", async (req, res) => {
 	try {
 		user = await tetrioApi.getOneUser(req.params.username);
 	} catch (e) {
-		return res.status(404).json({
-			message: `No user with the username, ${username}, found, please check spelling.`,
+		res.status(404).json({
+			message: `No user with the username, ${req.params.username}, found, please check spelling.`,
 		});
+		return;
 	}
+	console.log("skipped");
 	user.highest_rank = await tetrioApi.getPeakRank(req.params.username);
 	let tetrioUser = new TetrioUser();
 	tetrioUser
@@ -58,6 +60,12 @@ router.post("/user/:username", async (req, res) => {
 			});
 		})
 		.catch((e) => {
+			if (e.errno === 1062) {
+				res.status(422).json({
+					message: "Already inserted",
+				});
+				return;
+			}
 			res.status(500);
 			res.json({
 				message: e.message,

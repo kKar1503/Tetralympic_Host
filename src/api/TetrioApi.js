@@ -57,12 +57,14 @@ export default class Api {
 				res = await this.apiCall("/users/" + user);
 			} catch (e) {
 				reject(e);
+				return;
 			}
 
 			if (!res.success) {
+				console.log(res.error);
 				reject(new Error(res.error));
+				return;
 			}
-
 			resolve(new TetrioUserInterface(res.data.user, { fromApi: true }));
 		});
 	}

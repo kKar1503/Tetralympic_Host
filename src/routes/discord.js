@@ -76,9 +76,15 @@ router.put("/user/:discordId", async (req, res) => {
 	try {
 		foundUser = await tetrioUser.GetOneUserByName(tetrioUsername);
 	} catch (e) {
-		return res.status(404).json({
+		res.status(500).json({
+			message: `Database Error.`,
+		});
+	}
+	if (foundUser.length === 0) {
+		res.status(404).json({
 			message: `No user with the Tetrio username, ${tetrioUsername}, found, please check again.`,
 		});
+		return;
 	}
 	let tetrioId = foundUser[0].id;
 
