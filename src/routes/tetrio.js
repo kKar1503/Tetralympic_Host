@@ -46,7 +46,7 @@ router.post("/user/:username", async (req, res) => {
 			message: `No user with the username, ${username}, found, please check spelling.`,
 		});
 	}
-	user.highest_rank = await tetrioApi.getPeakRank(user.id);
+	user.highest_rank = await tetrioApi.getPeakRank(req.params.username);
 	let tetrioUser = new TetrioUser();
 	tetrioUser
 		.InsertOneUser(user)
