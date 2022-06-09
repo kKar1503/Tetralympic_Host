@@ -111,6 +111,35 @@ router.put("/user/:discordId", async (req, res) => {
 		.finally(() => discordUser.EndConnection());
 });
 
+router.delete("/unbind/:discordId", async (req, res) => {
+	let user = new DiscordUser();
+	let discordId = req.params.discordId;
+
+	user.UnbindTetrio(discordId)
+		.then((result) => {
+			if (result.affectedRows === 0) {
+				res.json({
+					updated: new Date(),
+					unbinded: false,
+					message: "Was not binded",
+				});
+				return;
+			}
+			res.json({
+				updated: new Date(),
+				unbinded: true,
+				message: "Unbinded",
+			});
+		})
+		.catch((e) => {
+			res.status(500);
+			res.json({
+				message: e.message,
+			});
+		})
+		.finally(() => user.EndConnection());
+});
+
 router.get("/user/:id", async (req, res) => {
 	let id = req.params.id;
 	let user = new DiscordUser();
