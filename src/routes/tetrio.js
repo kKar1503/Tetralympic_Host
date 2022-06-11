@@ -74,6 +74,34 @@ router.post("/user/:username", async (req, res) => {
 		.finally(() => tetrioUser.EndConnection());
 });
 
+router.post("/phone/:userId/:phone", async (req, res) => {
+	let id = req.params.userId;
+	let phone = req.params.phone;
+	let tetrioUser = new TetrioUser();
+	tetrioUser
+		.InsertOnePhone(id, phone)
+		.then((result) => {
+			res.status(201);
+			res.json({
+				affectedRows: result.affectedRows,
+				message: `Successfully insert ${result.affectedRows} user.`,
+			});
+		})
+		.catch((e) => {
+			if (e.errno === 1062) {
+				res.status(422).json({
+					message: "Already inserted",
+				});
+				return;
+			}
+			res.status(500);
+			res.json({
+				message: e.message,
+			});
+		})
+		.finally(() => tetrioUser.EndConnection());
+});
+
 router.get("/user/:username", async (req, res) => {
 	let username = req.params.username;
 	let user = new TetrioUser();

@@ -69,6 +69,23 @@ export default class TetrioUser extends TetralympicTable {
 		});
 	}
 
+	InsertOnePhone(id, phone) {
+		return new Promise((resolve, reject) => {
+			const queryString = `INSERT INTO sg_tetrio_user_phone (fk_tetrio_user_id, phone_no) VALUES (?, ?)`;
+			this.connection.query(queryString, [id, phone], (error, result) => {
+				if (error) {
+					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
+					return reject(error);
+				}
+				if (this.useLogger)
+					this.logger.QuerySuccess(queryString, result, {
+						affectedRows: true,
+					});
+				resolve(result);
+			});
+		});
+	}
+
 	PushSnapshot(snapshot) {
 		return new Promise((resolve, reject) => {
 			let users = snapshot.users;
