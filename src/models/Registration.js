@@ -66,4 +66,20 @@ export default class Registration extends TetralympicTable {
 			});
 		});
 	}
+
+	GetParticipants(compId) {
+		return new Promise((resolve, reject) => {
+			const queryString = `SELECT t.* FROM tetrio_user AS t
+			JOIN ${this.tableName} AS c ON t.id = c.fk_tetrio_id
+			WHERE c.fk_competition_id = ?`;
+			this.connection.query(queryString, compId, (error, result) => {
+				if (error) {
+					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
+					return reject(error);
+				}
+				if (this.useLogger) this.logger.QuerySuccess(queryString, result, { length: true });
+				resolve(result);
+			});
+		});
+	}
 }

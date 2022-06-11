@@ -136,4 +136,24 @@ router.delete("/register/:tetrioId/:compId", (req, res) => {
 		.finally(() => register.EndConnection());
 });
 
+router.get("/participants/:compId", (req, res) => {
+	let compId = req.params.compId;
+	let register = new Registration();
+	register
+		.GetParticipants(compId)
+		.then((results) => {
+			res.json({
+				updated: new Date(),
+				count: results.length,
+				data: results,
+			});
+		})
+		.catch((e) => {
+			res.status(500).json({
+				message: e.message,
+			});
+		})
+		.finally(() => register.EndConnection());
+});
+
 export default router;
