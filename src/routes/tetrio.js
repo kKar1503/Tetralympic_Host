@@ -74,12 +74,21 @@ router.post("/user/:username", async (req, res) => {
 		.finally(() => tetrioUser.EndConnection());
 });
 
-router.post("/phone/:userId/:phone", async (req, res) => {
-	let id = req.params.userId;
+router.post("/phone/:username/:phone", async (req, res) => {
 	let phone = req.params.phone;
+	let tetrioApi = new TetrioApi();
+	let user;
+	try {
+		user = await tetrioApi.getOneUser(req.params.username);
+	} catch (e) {
+		res.status(404).json({
+			message: `No user with the username, ${req.params.username}, found, please check spelling.`,
+		});
+		return;
+	}
 	let tetrioUser = new TetrioUser();
 	tetrioUser
-		.InsertOnePhone(id, phone)
+		.InsertOnePhone(user.id, phone)
 		.then((result) => {
 			res.status(201);
 			res.json({
