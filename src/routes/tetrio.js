@@ -111,6 +111,31 @@ router.post("/phone/:username/:phone", async (req, res) => {
 		.finally(() => tetrioUser.EndConnection());
 });
 
+router.get("/phoneVerify/:phone", async (req, res) => {
+	let phone = req.params.phone;
+	let user = new TetrioUser();
+	user.CheckPhone(phone)
+		.then((results) => {
+			if (results.length == 0) {
+				res.status(404).json({
+					message: `Not found`,
+				});
+			} else {
+				res.json({
+					updated: new Date(),
+					data: results,
+				});
+			}
+		})
+		.catch((e) => {
+			res.status(500);
+			res.json({
+				message: e.message,
+			});
+		})
+		.finally(() => user.EndConnection());
+});
+
 router.get("/user/:username", async (req, res) => {
 	let username = req.params.username;
 	let user = new TetrioUser();

@@ -86,6 +86,23 @@ export default class TetrioUser extends TetralympicTable {
 		});
 	}
 
+	CheckPhone(phone) {
+		return new Promise((resolve, reject) => {
+			const queryString = `select d.username,d.discriminator, t.username from discord_user as d join tetrio_user as t on t.id = d.fk_tetrio_id join sg_tetrio_user_phone as p on p.fk_tetrio_user_id = t.id where p.phone_no = ?;`;
+			this.connection.query(queryString, [phone], (error, result) => {
+				if (error) {
+					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
+					return reject(error);
+				}
+				if (this.useLogger)
+					this.logger.QuerySuccess(queryString, result, {
+						affectedRows: true,
+					});
+				resolve(result);
+			});
+		});
+	}
+
 	PushSnapshot(snapshot) {
 		return new Promise((resolve, reject) => {
 			let users = snapshot.users;
