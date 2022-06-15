@@ -111,7 +111,9 @@ router.post("/phone/:username/:phone", async (req, res) => {
 		.finally(() => tetrioUser.EndConnection());
 });
 
-router.get("/phoneVerify/:phone", async (req, res) => {
+router.get("/phoneVerify/:phone", authenticateToken, async (req, res) => {
+	let authData = req.authData;
+	if (!authData.getTetrioUsers) res.sendStatus(403);
 	let phone = req.params.phone;
 	let user = new TetrioUser();
 	user.CheckPhone(phone)
