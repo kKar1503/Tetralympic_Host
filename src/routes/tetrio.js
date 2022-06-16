@@ -138,6 +138,33 @@ router.get("/phoneVerify/:phone", authenticateToken, async (req, res) => {
 		.finally(() => user.EndConnection());
 });
 
+router.post("/phoneVerify/:phone", authenticateToken, async (req, res) => {
+	let authData = req.authData;
+	if (!authData.getTetrioUsers) res.sendStatus(403);
+	let phone = req.params.phone;
+	let user = new TetrioUser();
+	user.VerifiedPhone(phone)
+		.then((results) => {
+			if (results.affectedRows == 0) {
+				res.status(404).json({
+					message: `Not found`,
+				});
+			} else {
+				res.json({
+					updated: new Date(),
+					data: results,
+				});
+			}
+		})
+		.catch((e) => {
+			res.status(500);
+			res.json({
+				message: e.message,
+			});
+		})
+		.finally(() => user.EndConnection());
+});
+
 router.get("/user/:username", async (req, res) => {
 	let username = req.params.username;
 	let user = new TetrioUser();

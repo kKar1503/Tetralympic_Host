@@ -96,6 +96,23 @@ export default class TetrioUser extends TetralympicTable {
 				}
 				if (this.useLogger)
 					this.logger.QuerySuccess(queryString, result, {
+						length: true,
+					});
+				resolve(result);
+			});
+		});
+	}
+
+	VerifiedPhone(phone) {
+		return new Promise((resolve, reject) => {
+			const queryString = `UPDATE sg_tetrio_user_phone SET verified = 1 WHERE phone_no = ?`;
+			this.connection.query(queryString, [phone], (error, result) => {
+				if (error) {
+					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
+					return reject(error);
+				}
+				if (this.useLogger)
+					this.logger.QuerySuccess(queryString, result, {
 						affectedRows: true,
 					});
 				resolve(result);
