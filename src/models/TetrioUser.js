@@ -88,7 +88,24 @@ export default class TetrioUser extends TetralympicTable {
 
 	CheckPhone(phone) {
 		return new Promise((resolve, reject) => {
-			const queryString = `select d.username as dUsername, d.discriminator, t.username as tUsername from discord_user as d join tetrio_user as t on t.id = d.fk_tetrio_id join sg_tetrio_user_phone as p on p.fk_tetrio_user_id = t.id where p.phone_no = ?;`;
+			const queryString = `select d.username as dUsername, d.discriminator, t.username, p.verified as tUsername from discord_user as d join tetrio_user as t on t.id = d.fk_tetrio_id join sg_tetrio_user_phone as p on p.fk_tetrio_user_id = t.id where p.phone_no = ?;`;
+			this.connection.query(queryString, [phone], (error, result) => {
+				if (error) {
+					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
+					return reject(error);
+				}
+				if (this.useLogger)
+					this.logger.QuerySuccess(queryString, result, {
+						length: true,
+					});
+				resolve(result);
+			});
+		});
+	}
+
+	VerifiedPhone(phone) {
+		return new Promise((resolve, reject) => {
+			const queryString = `UPDATE sg_tetrio_user_phone SET verified = 1 WHERE phone_no = ?`;
 			this.connection.query(queryString, [phone], (error, result) => {
 				if (error) {
 					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
