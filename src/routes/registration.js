@@ -156,4 +156,35 @@ router.get("/participants/:compId", (req, res) => {
 		.finally(() => register.EndConnection());
 });
 
+router.post("/checkin/:tetrioId", async (req, res) => {
+	let tetrioId = req.params.tetrioId;
+	let registration = new Registration();
+	registration
+		.CheckIn(tetrioId)
+		.then((results) => {
+			console.log(results);
+			if (results.affectedRows == 0) {
+				res.status(404).json({
+					message: `Not found`,
+				});
+			} else if (results.changedRows == 0) {
+				res.status(422).json({
+					message: `Already updated`,
+				});
+			} else {
+				res.json({
+					updated: new Date(),
+					data: results,
+				});
+			}
+		})
+		.catch((e) => {
+			res.status(500);
+			res.json({
+				message: e.message,
+			});
+		})
+		.finally(() => registration.EndConnection());
+});
+
 export default router;

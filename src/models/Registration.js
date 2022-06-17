@@ -82,4 +82,22 @@ export default class Registration extends TetralympicTable {
 			});
 		});
 	}
+
+	CheckIn(tetrioId) {
+		return new Promise((resolve, reject) => {
+			const queryString = `UPDATE tetrio_user_checkin SET checked_in = 1 WHERE fk_tetrio_user_id = ?`;
+			this.connection.query(queryString, [tetrioId], (error, result) => {
+				if (error) {
+					if (this.useLogger) this.logger.QueryFailed(queryString, error.code);
+					return reject(error);
+				}
+				if (this.useLogger)
+					this.logger.QuerySuccess(queryString, result, {
+						changedRows: true,
+						affectedRows: true,
+					});
+				resolve(result);
+			});
+		});
+	}
 }
